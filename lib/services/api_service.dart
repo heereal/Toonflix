@@ -3,11 +3,15 @@ import 'package:http/http.dart' as http;
 import 'package:toonflix/models/webtoon_model.dart';
 
 class ApiService {
-  final String baseUrl = "https://webtoon-crawler.nomadcoders.workers.dev";
-  final String today = "today";
+  // static 키워드를 사용함으로써 이미 메모리에 할당되어 있음
+  // 따라서 static이 붙은 변수나 함수는 클래스 객체를 생성하지 않고도 사용할 수 있음
+  static const String baseUrl =
+      "https://webtoon-crawler.nomadcoders.workers.dev";
+  static const String today = "today";
 
-  // 비동기 함수이기 때문에 Future를 반환함 (Future는 '미래'에 받을 값의 타입을 알려줌)
-  Future<List<WebtoonModel>> getTodaysToons() async {
+  // 비동기 함수의 반환값 타입은 Future
+  // Future는 당장 완료될 수 없는 작업이라는 것을 의미하며, '미래'에 받을 값의 타입을 알려줌
+  static Future<List<WebtoonModel>> getTodaysToons() async {
     List<WebtoonModel> webtoonInstances = [];
 
     final url = Uri.parse('$baseUrl/$today');
@@ -19,7 +23,9 @@ class ApiService {
       // String 타입인 body를 JSON 형태로 디코딩
       final List<dynamic> webtoons = jsonDecode(response.body);
       for (var webtoon in webtoons) {
-        webtoonInstances.add(WebtoonModel.fromJson(webtoon));
+        // JSON 데이터를 Dart Class로 변환
+        final instance = WebtoonModel.fromJson(webtoon);
+        webtoonInstances.add(instance);
       }
       return webtoonInstances;
     } else {
