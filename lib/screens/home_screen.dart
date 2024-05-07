@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:toonflix/models/webtoon_model.dart';
 import 'package:toonflix/services/api_service.dart';
 
@@ -26,7 +28,7 @@ class HomeScreen extends StatelessWidget {
             return Column(
               children: [
                 const SizedBox(
-                  height: 40,
+                  height: 20,
                 ),
                 // Expanded는 화면의 남은 공간을 차지하는 위젯
                 Expanded(
@@ -49,6 +51,11 @@ class HomeScreen extends StatelessWidget {
   ListView makeList(AsyncSnapshot<List<WebtoonModel>> snapshot) {
     return ListView.separated(
       scrollDirection: Axis.horizontal,
+      // 리스트 전체 컨테이너에 padding
+      padding: const EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 10,
+      ),
       itemCount: snapshot.data!.length,
       // itemBuilder는 리스트뷰의 아이템을 만드는 역할을 함
       // 모든 아이템을 한번에 build 하지 않으며 사용자가 보고있는 아이템만 build함
@@ -57,19 +64,28 @@ class HomeScreen extends StatelessWidget {
         var webtoon = snapshot.data![index];
         return Column(
           children: [
-            SizedBox(
+            Container(
               width: 200,
+              // 자식의 부모 영역 침범을 제어함 (BorderRadius 적용 위해 추가)
+              clipBehavior: Clip.hardEdge,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 10,
+                    offset: const Offset(10, 10),
+                    color: Colors.black.withOpacity(0.5),
+                  ),
+                ],
+              ),
               child: Image.network(
                 webtoon.thumb,
-                // 403 에러 해결 위해 추가
-                headers: const {
-                  'Referer': 'https://comic.naver.com',
-                },
               ),
             ),
             const SizedBox(
               height: 10,
             ),
+            // TODO: 텍스트 넘치는 것 해결
             Text(
               webtoon.title,
               style: const TextStyle(
