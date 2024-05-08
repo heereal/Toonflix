@@ -19,9 +19,25 @@ class Webtoon extends StatelessWidget {
         // Navigator로 새 route를 push함
         Navigator.push(
           context,
-          // 단순한 위젯을 route로 변환 후 애니메이션 효과를 추가해서 스크린처럼 보이게 함
-          MaterialPageRoute(
-            builder: (context) =>
+          // 단순한 위젯을 route로 변환하고 애니메이션 효과를 추가해서 스크린처럼 보이게 함
+          // 애니메이션 설정 위해 MaterialPageRoute에서 PageRouteBuilder로 위젯 변경
+          PageRouteBuilder(
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              var begin = const Offset(0.0, 1.0);
+              var end = Offset.zero;
+              var curve = Curves.ease;
+              var tween = Tween(begin: begin, end: end).chain(
+                CurveTween(
+                  curve: curve,
+                ),
+              );
+              return SlideTransition(
+                position: animation.drive(tween),
+                child: child,
+              );
+            },
+            pageBuilder: (context, anmation, secondaryAnimation) =>
                 DetailScreen(title: title, thumb: thumb, id: id),
             // App Bar에 뒤로가기가 아닌 닫기 버튼이 생성됨
             fullscreenDialog: true,
