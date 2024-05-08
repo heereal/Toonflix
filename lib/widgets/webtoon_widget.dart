@@ -51,11 +51,15 @@ class Webtoon extends StatelessWidget {
           const SizedBox(
             height: 8,
           ),
-          // TODO: 텍스트 넘치는 것 해결
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 18,
+          SizedBox(
+            width: 200,
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 18,
+              ),
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
             ),
           ),
         ],
