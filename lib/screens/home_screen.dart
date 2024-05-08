@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:toonflix/models/webtoon_model.dart';
 import 'package:toonflix/services/api_service.dart';
+import 'package:toonflix/widgets/webtoon_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -62,37 +61,8 @@ class HomeScreen extends StatelessWidget {
       // 사용자가 보고있지 않은 아이템은 메모리에서 삭제됨
       itemBuilder: (context, index) {
         var webtoon = snapshot.data![index];
-        return Column(
-          children: [
-            Container(
-              width: 200,
-              // 자식의 부모 영역 침범을 제어함 (BorderRadius 적용 위해 추가)
-              clipBehavior: Clip.hardEdge,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    blurRadius: 10,
-                    offset: const Offset(10, 10),
-                    color: Colors.black.withOpacity(0.5),
-                  ),
-                ],
-              ),
-              child: Image.network(
-                webtoon.thumb,
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            // TODO: 텍스트 넘치는 것 해결
-            Text(
-              webtoon.title,
-              style: const TextStyle(
-                fontSize: 18,
-              ),
-            ),
-          ],
+        return Webtoon(
+          webtoon
         );
       },
       // 각 아이템 사이에 렌더링됨
