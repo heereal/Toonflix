@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:toonflix/models/webtoon_detail_model.dart';
+import 'package:toonflix/models/webtoon_episode_model.dart';
 import 'package:toonflix/models/webtoon_model.dart';
 
 class ApiService {
@@ -25,11 +27,39 @@ class ApiService {
       for (var webtoon in webtoons) {
         // JSON 데이터를 Dart Class로 변환
         final instance = WebtoonModel.fromJson(webtoon);
+        // 각각의 인스턴스를 list에 추가
         webtoonInstances.add(instance);
       }
       return webtoonInstances;
-    } else {
-      throw Error();
     }
+    throw Error();
+  }
+
+  static Future<WebtoonDetailModel> getToonById(String id) async {
+    final url = Uri.parse('$baseUrl/$id');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final webtoon = jsonDecode(response.body);
+      return WebtoonDetailModel.fromJson(webtoon);
+    }
+    throw Error();
+  }
+
+  static Future<List<WebtoonEpisodeModel>> getLatestEpisodesById(
+      String id) async {
+    List<WebtoonEpisodeModel> episodesInstances = [];
+    final url = Uri.parse('$baseUrl/$id/episodes');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final episodes = jsonDecode(response.body);
+      for (var episode in episodes) {
+        final instance = WebtoonEpisodeModel.fromJson(episode);
+        episodesInstances.add(instance);
+      }
+      return episodesInstances;
+    }
+    throw Error();
   }
 }

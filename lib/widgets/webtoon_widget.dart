@@ -12,11 +12,11 @@ class Webtoon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 탭 이벤트를 감지하는 위젯
+    // 탭, 드래그. 줌 등의 동작을 감지하는 위젯
     return GestureDetector(
       // 버튼을 탭 했을 때 발생하는 이벤트
       onTap: () {
-        // Navigator로 새 route를 push함
+        // Navigator로 새 route를 push함 (현재 위젯 위에 route 하는 다른 위젯을 올려줌)
         Navigator.push(
           context,
           // 단순한 위젯을 route로 변환하고 애니메이션 효과를 추가해서 스크린처럼 보이게 함
