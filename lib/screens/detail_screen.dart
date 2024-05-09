@@ -25,11 +25,12 @@ class DetailScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(title),
+        title: const Text('오늘의 웹툰'),
         centerTitle: true,
-        backgroundColor: Colors.indigo[400],
-        foregroundColor: Colors.white,
-        elevation: 1,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.indigo[400],
+        elevation: 2,
+        surfaceTintColor: Colors.white,
         shadowColor: Colors.black,
       ),
       // 스크롤 overflow 문제 해결

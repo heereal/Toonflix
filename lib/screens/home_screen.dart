@@ -15,9 +15,10 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('오늘의 웹툰'),
         centerTitle: true,
-        backgroundColor: Colors.indigo[400],
-        foregroundColor: Colors.white,
-        elevation: 1,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.indigo[400],
+        elevation: 2,
+        surfaceTintColor: Colors.white, // elevation 추가 후 앱바 어두워지는 문제 해결
         shadowColor: Colors.black,
       ),
       body: FutureBuilder(
@@ -61,9 +62,7 @@ class HomeScreen extends StatelessWidget {
       // 사용자가 보고있지 않은 아이템은 메모리에서 삭제됨
       itemBuilder: (context, index) {
         var webtoon = snapshot.data![index];
-        return Webtoon(
-          webtoon
-        );
+        return Webtoon(webtoon);
       },
       // 각 아이템 사이에 렌더링됨
       separatorBuilder: (context, index) => const SizedBox(
