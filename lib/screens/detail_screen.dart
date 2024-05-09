@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toonflix/models/webtoon_detail_model.dart';
 import 'package:toonflix/models/webtoon_episode_model.dart';
 import 'package:toonflix/services/api_service.dart';
 import 'package:toonflix/widgets/episode_widget.dart';
 
-class DetailScreen extends StatelessWidget {
+class DetailScreen extends StatefulWidget {
   final String title, thumb, id;
 
   late final Future<WebtoonDetailModel> webtoon;
@@ -21,6 +22,55 @@ class DetailScreen extends StatelessWidget {
         episodes = ApiService.getLatestEpisodesById(id);
 
   @override
+  State<DetailScreen> createState() => _DetailScreenState();
+}
+
+class _DetailScreenState extends State<DetailScreen> {
+  late final SharedPreferences prefs;
+  bool isLiked = false;
+
+  // initState에서 likedToons 리스트 불러오기
+  Future initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    final likedToons = prefs.getStringList('likedToons');
+
+    // 리스트가 이미 존재하는 경우
+    if (likedToons != null) {
+      if (likedToons.contains(widget.id) == true) {
+        // initState에서 실행되는 함수라고 해도 setState를 해야 UI가 업데이트됨
+        setState(() {
+          isLiked = true;
+        });
+      }
+    } else {
+      // 사용자가 앱을 최초로 실행한 경우 리스트 생성
+      await prefs.setStringList('likedToons', []);
+    }
+  }
+
+  // AppBar에서 하트 클릭 시 작동
+  onHeartTap() async {
+    final likedToons = prefs.getStringList('likedToons');
+    if (likedToons != null) {
+      if (isLiked) {
+        likedToons.remove(widget.id);
+      } else {
+        likedToons.add(widget.id);
+      }
+      await prefs.setStringList('likedToons', likedToons);
+      setState(() {
+        isLiked = !isLiked;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initPrefs();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -32,6 +82,14 @@ class DetailScreen extends StatelessWidget {
         elevation: 2,
         surfaceTintColor: Colors.white,
         shadowColor: Colors.black,
+        actions: [
+          IconButton(
+            onPressed: onHeartTap,
+            icon: Icon(
+              isLiked ? Icons.favorite_rounded : Icons.favorite_outline_rounded,
+            ),
+          ),
+        ],
       ),
       // 스크롤 overflow 문제 해결
       body: SingleChildScrollView(
@@ -45,7 +103,7 @@ class DetailScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Hero(
-                    tag: id,
+                    tag: widget.id,
                     child: Container(
                       width: 200,
                       // 자식의 부모 영역 침범을 제어함 (BorderRadius 적용 위해 추가)
@@ -61,7 +119,7 @@ class DetailScreen extends StatelessWidget {
                         ],
                       ),
                       child: Image.network(
-                        thumb,
+                        widget.thumb,
                       ),
                     ),
                   ),
@@ -71,7 +129,7 @@ class DetailScreen extends StatelessWidget {
                 height: 20,
               ),
               FutureBuilder(
-                future: webtoon,
+                future: widget.webtoon,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return Column(
@@ -104,13 +162,13 @@ class DetailScreen extends StatelessWidget {
               // 데이터의 양이 10개밖에 되지 않기 때문에 ListView 대신 Column 사용
               // ListView는 데이터가 많아서 최적화가 요구되는 상황에 사용
               FutureBuilder(
-                future: episodes,
+                future: widget.episodes,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return Column(
                       children: [
                         for (var episode in snapshot.data!)
-                          Episode(episode: episode, webtoonId: id)
+                          Episode(episode: episode, webtoonId: widget.id)
                       ],
                     );
                   }
