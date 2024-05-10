@@ -26,6 +26,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.indigo,
+          primary: Colors.indigo.shade400,
+        ),
+        appBarTheme: AppBarTheme(
+          centerTitle: true,
+          // backgroundColor: Colors.white,
+          foregroundColor: Colors.indigo.shade400,
+          elevation: 2,
+          surfaceTintColor: Colors.white, // elevation 추가 후 앱바 어두워지는 문제 해결
+          shadowColor: Colors.black,
+        ),
+      ),
       home: HomeScreen(),
     );
   }

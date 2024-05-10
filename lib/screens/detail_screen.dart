@@ -76,12 +76,6 @@ class _DetailScreenState extends State<DetailScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('오늘의 웹툰'),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.indigo[400],
-        elevation: 2,
-        surfaceTintColor: Colors.white,
-        shadowColor: Colors.black,
         actions: [
           IconButton(
             onPressed: onHeartTap,

@@ -14,12 +14,6 @@ class HomeScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('오늘의 웹툰'),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.indigo[400],
-        elevation: 2,
-        surfaceTintColor: Colors.white, // elevation 추가 후 앱바 어두워지는 문제 해결
-        shadowColor: Colors.black,
       ),
       body: FutureBuilder(
         future: webtoons,
