@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toonflix/models/webtoon_model.dart';
 import 'package:toonflix/screens/detail_screen.dart';
+import 'package:toonflix/widgets/webtoon_thumb_widget.dart';
 
 class Webtoon extends StatelessWidget {
   final String title, thumb, id;
@@ -48,24 +49,7 @@ class Webtoon extends StatelessWidget {
         children: [
           Hero(
             tag: id,
-            child: Container(
-              width: 200,
-              // 자식의 부모 영역 침범을 제어함 (BorderRadius 적용 위해 추가)
-              clipBehavior: Clip.hardEdge,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    blurRadius: 10,
-                    offset: const Offset(10, 10),
-                    color: Colors.black.withOpacity(0.3),
-                  ),
-                ],
-              ),
-              child: Image.network(
-                thumb,
-              ),
-            ),
+            child: WebtoonThumb(thumb: thumb),
           ),
           const SizedBox(
             height: 8,
