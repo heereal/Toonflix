@@ -143,16 +143,20 @@ class _DetailScreenState extends State<DetailScreen> {
                 future: widget.episodes,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return Column(
-                      children: [
-                        for (var episode in snapshot.data!)
-                          Episode(episode: episode, webtoonId: widget.id)
-                      ],
+                    return ListView.builder(
+                      shrinkWrap: true, // 리스트 자식 높이 크기의 합 만큼 영역 지정
+                      physics:
+                          const NeverScrollableScrollPhysics(), // 리스트뷰 내에서 스크롤 안되도록 설정
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        var episode = snapshot.data![index];
+                        return Episode(episode: episode, webtoonId: widget.id);
+                      },
                     );
                   }
                   return Container();
                 },
-              )
+              ),
             ],
           ),
         ),
