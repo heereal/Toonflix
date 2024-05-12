@@ -76,7 +76,7 @@ class _DetailScreenState extends State<DetailScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('오늘의 웹툰'),
+        title: Text(widget.title),
         actions: [
           IconButton(
             onPressed: onHeartTap,
@@ -143,7 +143,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 future: widget.episodes,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return ListView.builder(
+                    return ListView.separated(
                       shrinkWrap: true, // 리스트 자식 높이 크기의 합 만큼 영역 지정
                       physics:
                           const NeverScrollableScrollPhysics(), // 리스트뷰 내에서 스크롤 안되도록 설정
@@ -151,6 +151,9 @@ class _DetailScreenState extends State<DetailScreen> {
                       itemBuilder: (context, index) {
                         var episode = snapshot.data![index];
                         return Episode(episode: episode, webtoonId: widget.id);
+                      },
+                      separatorBuilder: (context, index) {
+                        return const Divider();
                       },
                     );
                   }

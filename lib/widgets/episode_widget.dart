@@ -22,38 +22,47 @@ class Episode extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onButtonTap,
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary,
-          borderRadius: BorderRadius.circular(20),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 5,
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 10,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // 텍스트에 유동적인 width를 설정하기 위해 Flexible 위젯 추가
-              Flexible(
-                child: Text(
-                  episode.title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // 텍스트가 넘치는 문제를 해결하기 위해 Row와 Text에 Flexible 위젯 추가
+            Flexible(
+              child: Row(
+                children: [
+                  Container(
+                    height: 50,
+                    width: 85,
+                    margin: const EdgeInsets.only(right: 10),
+                    // 자식의 부모 영역 침범을 제어함 (BorderRadius 적용 위해 추가)
+                    clipBehavior: Clip.hardEdge,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Image.network(
+                      episode.thumb,
+                    ),
                   ),
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                ),
+                  Flexible(
+                    child: Text(
+                      episode.title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
               ),
-              const Icon(
-                Icons.chevron_right_rounded,
-                color: Colors.white,
-              ),
-            ],
-          ),
+            ),
+            Icon(
+              Icons.chevron_right_rounded,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ],
         ),
       ),
     );
